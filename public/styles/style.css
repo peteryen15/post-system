@@ -1,0 +1,55 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 1.25rem;
+}
+
+body {
+  background-color: moccasin;
+}
+
+h1 {
+  font-size: 3rem;
+  margin: 1rem;
+}
+
+div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1rem;
+}
+
+strong {
+  color: red;
+}
+
+button {
+  border: none;
+  border-radius: 8px;
+  padding: 6px 16px;
+  background-color: #3581b8;
+}
+button:hover {
+  background-color: #076686;
+}
+
+nav {
+  box-shadow: 0 8px 6px -6px black;
+  background-color: #242325;
+}
+nav ul {
+  list-style-type: none;
+  display: flex;
+}
+nav ul li {
+  padding: 1rem;
+}
+nav ul li a {
+  text-decoration: none;
+  color: white;
+}
+nav ul li a:hover {
+  color: moccasin;
+}/*# sourceMappingURL=style.css.map */
