@@ -10,7 +10,7 @@ import { errorHandler } from "./middleware/errors.js";
 import session from "express-session";
 import flash from "connect-flash";
 
-// 連結MongoBB
+// 連結MongoDB
 mongoose
   .connect(process.env.DB_CONNECT)
   .then(() => {
