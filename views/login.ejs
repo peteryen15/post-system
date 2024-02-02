@@ -9,7 +9,14 @@
     <div>
       <h1>登入會員</h1>
     </div>
-    <%- include ("./partials/message") %>
+    <%- include ("./partials/message") %> <% if (token) { %>
+    <!-- 如果存在 token，將 token 儲存在 localStorage -->
+    <script>
+      localStorage.setItem("token", "<%= token %>");
+      window.location.href = "/";
+    </script>
+    <% } %>
+
     <form id="loginForm" action="/login" method="POST">
       <div>
         <label for="inputEmail">信箱</label>
@@ -21,37 +28,5 @@
         <button>登入</button>
       </div>
     </form>
-
-    <script>
-      document
-        .querySelector("#loginForm")
-        .addEventListener("submit", async (event) => {
-          event.preventDefault();
-
-          const email = document.querySelector("#inputEmail").value;
-          const password = document.querySelector("#inputPassword").value;
-
-          try {
-            const response = await fetch("/login", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ email, password }),
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-              // 登入成功，將 token 存儲在 localStorage
-              localStorage.setItem("token", data.token);
-
-              // location.href = "/";
-            }
-          } catch (error) {
-            console.error("Error during login:", error);
-          }
-        });
-    </script>
   </body>
 </html>

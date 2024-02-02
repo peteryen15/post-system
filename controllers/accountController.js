@@ -4,7 +4,7 @@ export const indexView = (req, res) => {
   return res.render("index");
 };
 export const loginView = (req, res) => {
-  return res.render("login");
+  return res.render("login", { token: "" });
 };
 export const registerView = (req, res) => {
   return res.render("register");
@@ -16,14 +16,14 @@ export const verifyAccount = async (req, res, next) => {
     // console.log(email, password);
 
     const token = await accountService.verifyAccount(email, password);
-    console.log(token);
+    // console.log(token);
 
     // unfinished
 
-    // return res.redirect("/");
-    return res
-      .status(200)
-      .send({ message: "登入成功!", token: "JWT " + token });
+    return res.render("login", { message: "登入成功!", token: "JWT " + token });
+    // return res
+    //   .status(200)
+    //   .send({ message: "登入成功!", token: "JWT " + token });
   } catch (e) {
     next(e);
   }
