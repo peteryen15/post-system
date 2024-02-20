@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import accountRoute from "./accountRoute.js";
+import accountRoute from "./src/routes/accountRoute.js";
 
 router.use("/", accountRoute);
 

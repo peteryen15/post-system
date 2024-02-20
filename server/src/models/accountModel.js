@@ -54,6 +54,5 @@ export const isAccountExist = async (name, email) => {
 
 export const addAccount = async (name, email, password) => {
   const newAccount = new Account({ name, email, password });
-  console.log(newAccount);
   await newAccount.save();
 };
