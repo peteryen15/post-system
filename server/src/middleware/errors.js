@@ -14,5 +14,5 @@ export const errorHandler = (err, req, res, next) => {
 
   console.log(err);
 
-  return res.status(500).send("未知的錯誤");
+  return res.status(500).send({ message: "未知的錯誤!" });
 };

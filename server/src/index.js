@@ -7,6 +7,7 @@ const app = express();
 import mongoose from "mongoose";
 import router from "../routes.js";
 import { errorHandler } from "./middleware/errors.js";
+import cors from "cors";
 
 (() => {
   // 連結MongoDB
@@ -21,6 +22,7 @@ import { errorHandler } from "./middleware/errors.js";
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  app.use(cors());
   app.use("/api/account", router);
   app.use(errorHandler);
 
