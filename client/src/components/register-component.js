@@ -25,8 +25,12 @@ const RegisterComponent = () => {
         window.alert("註冊成功，您將被導向登入頁面");
         navigate("/login");
       })
-      .catch((e) => {
-        setMessage(e.response.data.message);
+      .catch((err) => {
+        if (err.response) {
+          setMessage(err.response.data.message);
+        } else {
+          setMessage("未知的錯誤!");
+        }
       });
   };
 
