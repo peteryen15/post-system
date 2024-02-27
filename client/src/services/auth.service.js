@@ -5,13 +5,18 @@ class AuthService {
   login(email, password) {
     return axios.post(API_URL + "/login", { email, password });
   }
-  logout() {}
+  logout() {
+    localStorage.removeItem("user");
+  }
   register(name, email, password) {
     return axios.post(API_URL + "/register", {
       name,
       email,
       password,
     });
+  }
+  getCurrentUser() {
+    return JSON.parse(localStorage.getItem("user"));
   }
 }
 
