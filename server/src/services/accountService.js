@@ -1,7 +1,7 @@
 import { CustomError } from "../middleware/errors.js";
 import * as accountModel from "../models/accountModel.js";
+import { signJwt } from "../utils/jwt/jwt.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 
 export const verifyAccount = async (email, password) => {
   if (!email) {
@@ -16,7 +16,9 @@ export const verifyAccount = async (email, password) => {
   if (foundAccount) {
     if (await bcrypt.compare(password, foundAccount.password)) {
       const tokenObject = { _id: foundAccount._id, email: foundAccount.email };
-      return jwt.sign(tokenObject, process.env.PASSPORT_SECRET);
+      const token = signJwt(tokenObject);
+
+      return { token, user: foundAccount };
     } else {
       throw new CustomError(401, "密碼錯誤!");
     }
