@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../services/auth.service";
 
-const LoginComponent = () => {
+const LoginComponent = ({ currentUser, setCurrentUser }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,6 +20,7 @@ const LoginComponent = () => {
       const response = await AuthService.login(email, password);
       localStorage.setItem("user", JSON.stringify(response.data));
       window.alert("登入成功，您將被導向個人頁面");
+      setCurrentUser(AuthService.getCurrentUser());
       navigate("/profile");
     } catch (err) {
       if (err.response) {

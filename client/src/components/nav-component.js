@@ -2,10 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import AuthService from "../services/auth.service";
 
-const NavComponent = () => {
+const NavComponent = ({ currentUser, setCurrentUser }) => {
   const handleLogout = () => {
     AuthService.logout();
     window.alert("登出成功，您將被導向首頁");
+    setCurrentUser(null);
   };
 
   return (
@@ -21,29 +22,37 @@ const NavComponent = () => {
                   </Link>
                 </li>
 
-                <li className="nav-item">
-                  <Link className="nav-link" to="/register">
-                    註冊會員
-                  </Link>
-                </li>
+                {!currentUser && (
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/register">
+                      註冊會員
+                    </Link>
+                  </li>
+                )}
 
-                <li className="nav-item">
-                  <Link className="nav-link" to="/login">
-                    會員登入
-                  </Link>
-                </li>
+                {!currentUser && (
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/login">
+                      會員登入
+                    </Link>
+                  </li>
+                )}
 
-                <li className="nav-item">
-                  <Link onClick={handleLogout} className="nav-link" to="/">
-                    登出
-                  </Link>
-                </li>
+                {currentUser && (
+                  <li className="nav-item">
+                    <Link onClick={handleLogout} className="nav-link" to="/">
+                      登出
+                    </Link>
+                  </li>
+                )}
 
-                <li className="nav-item">
-                  <Link className="nav-link" to="/profile">
-                    個人頁面
-                  </Link>
-                </li>
+                {currentUser && (
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/profile">
+                      個人頁面
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
           </div>
