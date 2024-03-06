@@ -35,7 +35,7 @@ accountSchema.pre("save", async function (next) {
 
 const Account = mongoose.model("Account", accountSchema);
 
-export const findAccount = async (email) => {
+export const findByEmail = async (email) => {
   return Account.findOne({ email }).exec();
 };
 
@@ -44,12 +44,8 @@ export const findAccount = async (email) => {
 // };
 
 export const isAccountExist = async (name, email) => {
-  const nameExist = await Account.findOne({ name }).exec();
-  const emailExist = await Account.findOne({ email }).exec();
-
-  if (nameExist || emailExist) {
-    return true;
-  }
+  const account = await Account.findOne({ $or: [{ name }, { email }] }).exec();
+  return !!account;
 };
 
 export const addAccount = async (name, email, password) => {

@@ -23,7 +23,7 @@ import cors from "cors";
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(cors());
-  app.use("/api/account", router);
+  app.use("/api", router);
   app.use(errorHandler);
 
   app.listen(process.env.PORT, () => {

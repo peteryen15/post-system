@@ -3,7 +3,7 @@ import * as accountModel from "../models/accountModel.js";
 import { signJwt } from "../utils/jwt/jwt.js";
 import bcrypt from "bcrypt";
 
-export const verifyAccount = async (email, password) => {
+export const loginAccount = async (email, password) => {
   if (!email) {
     throw new CustomError(400, "無效的信箱!");
   }
@@ -11,7 +11,7 @@ export const verifyAccount = async (email, password) => {
     throw new CustomError(400, "無效的密碼!");
   }
 
-  const foundAccount = await accountModel.findAccount(email);
+  const foundAccount = await accountModel.findByEmail(email);
 
   if (foundAccount) {
     if (await bcrypt.compare(password, foundAccount.password)) {
