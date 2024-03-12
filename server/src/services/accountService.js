@@ -11,7 +11,7 @@ export const loginAccount = async (email, password) => {
     throw new CustomError(400, "無效的密碼!");
   }
 
-  const foundAccount = await accountModel.findByEmail(email);
+  const foundAccount = await accountModel.findAccountByEmail(email);
 
   if (foundAccount) {
     if (await bcrypt.compare(password, foundAccount.password)) {
