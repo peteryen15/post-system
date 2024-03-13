@@ -20,11 +20,21 @@ const postSchema = new mongoose.Schema({
 
 const Post = mongoose.model("Post", postSchema);
 
-export const findPost = (_id) => {
-  return Post.find({ author: _id }).exec();
+export const findPost = (author) => {
+  return Post.find({ author }).exec();
 };
 
-export const addPost = (_id, title, content) => {
-  const newPost = new Post({ author: _id, title, content });
+export const addPost = (author, title, content) => {
+  const newPost = new Post({ author, title, content });
   return newPost.save();
+};
+
+export const updatePost = (author, _id, post) => {
+  return Post.findOneAndUpdate({ $and: [{ author }, { _id }] }, post, {
+    new: true,
+  }).exec();
+};
+
+export const deletePost = (author, _id) => {
+  return Post.deleteOne({ $and: [{ author }, { _id }] }).exec();
 };
