@@ -54,6 +54,14 @@ const NavComponent = ({ currentUser, setCurrentUser }) => {
 
                 {currentUser && (
                   <li className="nav-item">
+                    <Link className="nav-link" to="/post">
+                      我的貼文
+                    </Link>
+                  </li>
+                )}
+
+                {currentUser && (
+                  <li className="nav-item">
                     <Link onClick={handleLogout} className="nav-link" to="/">
                       登出
                     </Link>

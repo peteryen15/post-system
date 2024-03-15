@@ -4,6 +4,7 @@ import Layout from "./components/Layout";
 import HomeComponent from "./components/home-component";
 import RegisterComponent from "./components/register-component";
 import LoginComponent from "./components/login-component";
+import PostComponent from "./components/post-component";
 import ProfileComponent from "./components/profile-component";
 import AuthService from "./services/auth.service";
 
@@ -30,6 +31,16 @@ function App() {
               />
             }
           />
+          <Route
+            path="post"
+            element={
+              <PostComponent
+                currentUser={currentUser}
+                setCurrentUser={setCurrentUser}
+              />
+            }
+          />
+
           <Route
             path="profile"
             element={
