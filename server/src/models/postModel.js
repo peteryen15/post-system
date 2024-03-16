@@ -21,7 +21,7 @@ const postSchema = new mongoose.Schema({
 const Post = mongoose.model("Post", postSchema);
 
 export const findPost = (author) => {
-  return Post.find({ author }).exec();
+  return Post.find({ author }).sort({ date: -1 }).exec();
 };
 
 export const addPost = (author, title, content) => {
