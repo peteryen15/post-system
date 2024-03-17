@@ -38,11 +38,30 @@ const PostComponent = ({ currentUser, setCurrentUser }) => {
   };
 
   const handleEditPost = (index) => {
-    setEditedPost({
-      _id: postData[index]._id,
-      title: postData[index].title,
-      content: postData[index].content,
-    });
+    if (index != null) {
+      setEditedPost({
+        _id: postData[index]._id,
+        title: postData[index].title,
+        content: postData[index].content,
+      });
+    } else {
+      setEditedPost({
+        _id: "",
+        title: "",
+        content: "",
+      });
+    }
+  };
+
+  const handleAddPost = () => {
+    PostService.post(editedPost.title, editedPost.content)
+      .then((data) => {
+        window.alert(data.data.message);
+        navigate(0);
+      })
+      .catch((e) => {
+        showAlert(e.response.data.message, "");
+      });
   };
 
   const handleSaveChange = (index) => {
@@ -88,11 +107,74 @@ const PostComponent = ({ currentUser, setCurrentUser }) => {
       {currentUser && postData && (
         <div>
           <button
+            type="button"
             className="btn btn-primary"
             style={{ width: "18rem", margin: "1rem" }}
+            data-bs-toggle="modal"
+            data-bs-target="#addPostModal"
+            onClick={() => handleEditPost()}
           >
             新增貼文
           </button>
+
+          <div
+            className="modal fade"
+            id="addPostModal"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            tabIndex="-1"
+            aria-labelledby="addPostModalLabel"
+            aria-hidden="true"
+          >
+            <div className="modal-dialog modal-dialog-scrollable">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title" id="addPostModalLabel">
+                    <input
+                      onChange={handleTitleChange}
+                      type="text"
+                      className="form-control"
+                      placeholder="標題"
+                      value={editedPost.title}
+                    />
+                  </h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="取消"
+                  ></button>
+                </div>
+                <div className="modal-body">
+                  <textarea
+                    onChange={handleContentChange}
+                    className="form-control"
+                    style={{ height: "300px", resize: "none" }}
+                    placeholder="內容"
+                    value={editedPost.content}
+                  />
+                </div>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    取消
+                  </button>
+                  <button
+                    onClick={handleAddPost}
+                    type="button"
+                    className="btn btn-primary"
+                  >
+                    儲存
+                  </button>
+                </div>
+              </div>
+              <div id="alertPlaceholder"></div>
+            </div>
+          </div>
+
           {postData.length === 0 && (
             <div style={{ width: "18rem", margin: "1rem" }}>
               您目前沒有任何貼文。
@@ -113,7 +195,7 @@ const PostComponent = ({ currentUser, setCurrentUser }) => {
                       type="button"
                       className="btn btn-light"
                       data-bs-toggle="modal"
-                      data-bs-target={`#postModal${index}`}
+                      data-bs-target={`#editPostModal${index}`}
                       onClick={() => handleEditPost(index)}
                     >
                       編輯
@@ -123,11 +205,11 @@ const PostComponent = ({ currentUser, setCurrentUser }) => {
 
                 <div
                   className="modal fade"
-                  id={`postModal${index}`}
+                  id={`editPostModal${index}`}
                   data-bs-backdrop="static"
                   data-bs-keyboard="false"
                   tabIndex="-1"
-                  aria-labelledby={`postModalLabel${index}`}
+                  aria-labelledby={`editPostModalLabel${index}`}
                   aria-hidden="true"
                 >
                   <div className="modal-dialog modal-dialog-scrollable">
@@ -135,7 +217,7 @@ const PostComponent = ({ currentUser, setCurrentUser }) => {
                       <div className="modal-header">
                         <h5
                           className="modal-title"
-                          id={`postModalLabel${index}`}
+                          id={`editPostModalLabel${index}`}
                         >
                           <input
                             onChange={handleTitleChange}
@@ -210,7 +292,7 @@ const PostComponent = ({ currentUser, setCurrentUser }) => {
                         <button
                           type="button"
                           className="btn-close"
-                          data-bs-target={`#postModal${index}`}
+                          data-bs-target={`#editPostModal${index}`}
                           data-bs-toggle="modal"
                           aria-label="取消"
                         ></button>
@@ -219,7 +301,7 @@ const PostComponent = ({ currentUser, setCurrentUser }) => {
                         <button
                           type="button"
                           className="btn btn-secondary"
-                          data-bs-target={`#postModal${index}`}
+                          data-bs-target={`#editPostModal${index}`}
                           data-bs-toggle="modal"
                         >
                           取消

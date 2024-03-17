@@ -2,6 +2,20 @@ import axios from "axios";
 const API_URL = "http://localhost:8080/api/post";
 
 class PostService {
+  post(title, content) {
+    const token = JSON.parse(localStorage.getItem("user")).token;
+
+    return axios.post(
+      API_URL,
+      { title, content },
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+  }
+
   get() {
     const token = JSON.parse(localStorage.getItem("user")).token;
 
