@@ -27,17 +27,18 @@ export const updatePost = async (token, _id, title, content) => {
     throw new CustomError(400, "無效的ID!");
   }
 
-  const post = {};
-
-  if (title) {
-    post["title"] = title;
+  if (!title) {
+    throw new CustomError(400, "無效的標題!");
   }
 
-  if (content) {
-    post["content"] = content;
+  if (!content) {
+    throw new CustomError(400, "無效的內容!");
   }
 
-  const updatedPost = await postModel.updatePost(author, _id, post);
+  const updatedPost = await postModel.updatePost(author, _id, {
+    title,
+    content,
+  });
 
   if (!updatedPost) {
     throw new CustomError(404, "找不到要更新的post!");

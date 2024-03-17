@@ -44,6 +44,7 @@ const RegisterComponent = () => {
             onChange={handleName}
             type="text"
             className="form-control"
+            id="name"
             name="name"
           />
         </div>
@@ -54,6 +55,7 @@ const RegisterComponent = () => {
             onChange={handleEmail}
             type="text"
             className="form-control"
+            id="email"
             name="email"
           />
         </div>
@@ -64,6 +66,7 @@ const RegisterComponent = () => {
             onChange={handlePassword}
             type="password"
             className="form-control"
+            id="password"
             name="password"
             placeholder="長度至少超過6個英文或數字"
           />

@@ -43,10 +43,10 @@ export const updatePost = async (req, res, next) => {
 export const deletePost = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
-    const _id = req.query._id;
-    const result = await postService.deletePost(token, _id);
+    const { _id } = req.body;
+    await postService.deletePost(token, _id);
 
-    return res.status(200).send({ message: "刪除成功", result });
+    return res.status(200).send({ message: "刪除成功" });
   } catch (e) {
     next(e);
   }
