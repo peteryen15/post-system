@@ -21,9 +21,9 @@ export const addPost = (token, title, content) => {
   return postModel.addPost(author, title, content);
 };
 
-export const updatePost = async (token, _id, title, content) => {
+export const updatePost = async (token, postId, title, content) => {
   const { _id: author } = verifyJwt(token);
-  if (!_id) {
+  if (!postId) {
     throw new CustomError(400, "無效的ID!");
   }
 
@@ -35,7 +35,7 @@ export const updatePost = async (token, _id, title, content) => {
     throw new CustomError(400, "無效的內容!");
   }
 
-  const updatedPost = await postModel.updatePost(author, _id, {
+  const updatedPost = await postModel.updatePost(author, postId, {
     title,
     content,
   });
@@ -47,13 +47,13 @@ export const updatePost = async (token, _id, title, content) => {
   return updatedPost;
 };
 
-export const deletePost = async (token, _id) => {
+export const deletePost = async (token, postId) => {
   const { _id: author } = verifyJwt(token);
-  if (!_id) {
+  if (!postId) {
     throw new CustomError(400, "無效的ID!");
   }
 
-  const { deletedCount } = await postModel.deletePost(author, _id);
+  const { deletedCount } = await postModel.deletePost(author, postId);
 
   if (deletedCount == 0) {
     throw new CustomError(404, "找不到要刪除的post!");

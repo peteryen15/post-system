@@ -54,7 +54,7 @@ const NavComponent = ({ currentUser, setCurrentUser }) => {
 
                 {currentUser && (
                   <li className="nav-item">
-                    <Link className="nav-link" to="/post">
+                    <Link className="nav-link" to="/posts">
                       我的貼文
                     </Link>
                   </li>

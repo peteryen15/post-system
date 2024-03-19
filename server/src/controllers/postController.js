@@ -26,10 +26,11 @@ export const addPost = async (req, res, next) => {
 export const updatePost = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
-    const { _id, title, content } = req.body;
+    const postId = req.params.postId;
+    const { title, content } = req.body;
     const updatedPost = await postService.updatePost(
       token,
-      _id,
+      postId,
       title,
       content
     );
@@ -43,8 +44,8 @@ export const updatePost = async (req, res, next) => {
 export const deletePost = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
-    const { _id } = req.body;
-    await postService.deletePost(token, _id);
+    const postId = req.params.postId;
+    await postService.deletePost(token, postId);
 
     return res.status(200).send({ message: "刪除成功" });
   } catch (e) {

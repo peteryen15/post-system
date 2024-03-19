@@ -32,7 +32,7 @@ function App() {
             }
           />
           <Route
-            path="post"
+            path="posts"
             element={
               <PostComponent
                 currentUser={currentUser}

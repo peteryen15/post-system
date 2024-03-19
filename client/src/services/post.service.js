@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_URL = "http://localhost:8080/api/post";
+const API_URL = "http://localhost:8080/api/posts";
 
 class PostService {
   post(title, content) {
@@ -30,8 +30,8 @@ class PostService {
     const token = JSON.parse(localStorage.getItem("user")).token;
 
     return axios.patch(
-      API_URL,
-      { _id, title, content },
+      API_URL + "/" + _id,
+      { title, content },
       {
         headers: {
           Authorization: token,
@@ -43,8 +43,7 @@ class PostService {
   delete(_id) {
     const token = JSON.parse(localStorage.getItem("user")).token;
 
-    return axios.delete(API_URL, {
-      data: { _id },
+    return axios.delete(API_URL + "/" + _id, {
       headers: {
         Authorization: token,
       },

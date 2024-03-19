@@ -29,12 +29,12 @@ export const addPost = (author, title, content) => {
   return newPost.save();
 };
 
-export const updatePost = (author, _id, post) => {
-  return Post.findOneAndUpdate({ $and: [{ author }, { _id }] }, post, {
+export const updatePost = (author, postId, post) => {
+  return Post.findOneAndUpdate({ $and: [{ author }, { _id: postId }] }, post, {
     new: true,
   }).exec();
 };
 
-export const deletePost = (author, _id) => {
-  return Post.deleteOne({ $and: [{ author }, { _id }] }).exec();
+export const deletePost = (author, postId) => {
+  return Post.deleteOne({ $and: [{ author }, { _id: postId }] }).exec();
 };
