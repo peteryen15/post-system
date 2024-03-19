@@ -3,7 +3,9 @@ import * as postService from "../services/postService.js";
 export const findPost = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
-    const foundPost = await postService.findPost(token);
+    const { title } = req.query;
+
+    const foundPost = await postService.findPost(token, title);
 
     return res.status(200).send(foundPost);
   } catch (e) {

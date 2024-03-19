@@ -24,6 +24,14 @@ export const findPost = (author) => {
   return Post.find({ author }).sort({ date: -1 }).exec();
 };
 
+export const findPostByTitle = (author, title) => {
+  return Post.find({
+    $and: [{ author }, { title: { $regex: title, $options: "i" } }],
+  })
+    .sort({ date: -1 })
+    .exec();
+};
+
 export const addPost = (author, title, content) => {
   const newPost = new Post({ author, title, content });
   return newPost.save();

@@ -2,8 +2,12 @@ import { CustomError } from "../middleware/errors.js";
 import * as postModel from "../models/postModel.js";
 import { verifyJwt } from "../utils/jwt/jwt.js";
 
-export const findPost = (token) => {
+export const findPost = (token, title) => {
   const { _id: author } = verifyJwt(token);
+
+  if (title) {
+    return postModel.findPostByTitle(author, title);
+  }
 
   return postModel.findPost(author);
 };

@@ -2,8 +2,12 @@ import axios from "axios";
 const API_URL = "http://localhost:8080/api/posts";
 
 class PostService {
+  getToken() {
+    return JSON.parse(localStorage.getItem("user")).token;
+  }
+
   post(title, content) {
-    const token = JSON.parse(localStorage.getItem("user")).token;
+    const token = this.getToken();
 
     return axios.post(
       API_URL,
@@ -16,8 +20,16 @@ class PostService {
     );
   }
 
-  get() {
-    const token = JSON.parse(localStorage.getItem("user")).token;
+  get(title) {
+    if (title) {
+      return this.getByTitle(title);
+    } else {
+      return this.getAll();
+    }
+  }
+
+  getAll() {
+    const token = this.getToken();
 
     return axios.get(API_URL, {
       headers: {
@@ -26,8 +38,21 @@ class PostService {
     });
   }
 
+  getByTitle(title) {
+    const token = this.getToken();
+
+    return axios.get(API_URL, {
+      params: {
+        title,
+      },
+      headers: {
+        Authorization: token,
+      },
+    });
+  }
+
   patch(_id, title, content) {
-    const token = JSON.parse(localStorage.getItem("user")).token;
+    const token = this.getToken();
 
     return axios.patch(
       API_URL + "/" + _id,
@@ -41,7 +66,7 @@ class PostService {
   }
 
   delete(_id) {
-    const token = JSON.parse(localStorage.getItem("user")).token;
+    const token = this.getToken();
 
     return axios.delete(API_URL + "/" + _id, {
       headers: {

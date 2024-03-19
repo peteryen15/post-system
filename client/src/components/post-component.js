@@ -5,6 +5,7 @@ import PostService from "../services/post.service";
 const PostComponent = ({ currentUser, setCurrentUser }) => {
   const navigate = useNavigate();
   const [postData, setPostData] = useState("");
+  const [searchInput, setSearchInput] = useState("");
   const [editedPost, setEditedPost] = useState({
     _id: "",
     title: "",
@@ -22,6 +23,10 @@ const PostComponent = ({ currentUser, setCurrentUser }) => {
         });
     }
   }, [currentUser]);
+
+  const handleSearchChange = (e) => {
+    setSearchInput(e.target.value);
+  };
 
   const handleTitleChange = (e) => {
     setEditedPost({
@@ -64,7 +69,17 @@ const PostComponent = ({ currentUser, setCurrentUser }) => {
       });
   };
 
-  const handleSaveChange = (index) => {
+  const handleFindPost = () => {
+    PostService.get(searchInput)
+      .then((data) => {
+        setPostData(data.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const handleUpdatePost = (index) => {
     PostService.patch(editedPost._id, editedPost.title, editedPost.content)
       .then((data) => {
         window.alert(data.data.message);
@@ -106,79 +121,98 @@ const PostComponent = ({ currentUser, setCurrentUser }) => {
       {!currentUser && <div>在顯示您的貼文之前，請先登入會員。</div>}
       {currentUser && postData && (
         <div>
-          <button
-            type="button"
-            className="btn btn-primary"
-            style={{ width: "18rem", margin: "1rem" }}
-            data-bs-toggle="modal"
-            data-bs-target="#addPostModal"
-            onClick={() => handleEditPost()}
-          >
-            新增貼文
-          </button>
+          <div>
+            <button
+              type="button"
+              className="btn btn-primary"
+              style={{ width: "18rem", margin: "1rem" }}
+              data-bs-toggle="modal"
+              data-bs-target="#addPostModal"
+              onClick={() => handleEditPost()}
+            >
+              新增貼文
+            </button>
 
-          <div
-            className="modal fade"
-            id="addPostModal"
-            data-bs-backdrop="static"
-            data-bs-keyboard="false"
-            tabIndex="-1"
-            aria-labelledby="addPostModalLabel"
-            aria-hidden="true"
-          >
-            <div className="modal-dialog modal-dialog-scrollable">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title" id="addPostModalLabel">
-                    <input
-                      onChange={handleTitleChange}
-                      type="text"
+            <div
+              className="modal fade"
+              id="addPostModal"
+              data-bs-backdrop="static"
+              data-bs-keyboard="false"
+              tabIndex="-1"
+              aria-labelledby="addPostModalLabel"
+              aria-hidden="true"
+            >
+              <div className="modal-dialog modal-dialog-scrollable">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title" id="addPostModalLabel">
+                      <input
+                        onChange={handleTitleChange}
+                        type="text"
+                        className="form-control"
+                        placeholder="標題"
+                        value={editedPost.title}
+                      />
+                    </h5>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="取消"
+                    ></button>
+                  </div>
+                  <div className="modal-body">
+                    <textarea
+                      onChange={handleContentChange}
                       className="form-control"
-                      placeholder="標題"
-                      value={editedPost.title}
+                      style={{ height: "300px", resize: "none" }}
+                      placeholder="內容"
+                      value={editedPost.content}
                     />
-                  </h5>
-                  <button
-                    type="button"
-                    className="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="取消"
-                  ></button>
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      取消
+                    </button>
+                    <button
+                      onClick={handleAddPost}
+                      type="button"
+                      className="btn btn-primary"
+                    >
+                      儲存
+                    </button>
+                  </div>
                 </div>
-                <div className="modal-body">
-                  <textarea
-                    onChange={handleContentChange}
-                    className="form-control"
-                    style={{ height: "300px", resize: "none" }}
-                    placeholder="內容"
-                    value={editedPost.content}
-                  />
-                </div>
-                <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    data-bs-dismiss="modal"
-                  >
-                    取消
-                  </button>
-                  <button
-                    onClick={handleAddPost}
-                    type="button"
-                    className="btn btn-primary"
-                  >
-                    儲存
-                  </button>
-                </div>
+                <div id="alertPlaceholder"></div>
               </div>
-              <div id="alertPlaceholder"></div>
             </div>
           </div>
 
+          <div
+            className="input-group"
+            style={{ width: "18rem", margin: "1rem" }}
+          >
+            <input
+              type="text"
+              className="form-control"
+              placeholder="輸入標題"
+              onChange={handleSearchChange}
+            />
+            <button
+              className="btn btn-primary"
+              type="button"
+              onClick={handleFindPost}
+            >
+              查詢貼文
+            </button>
+          </div>
+
           {postData.length === 0 && (
-            <div style={{ width: "18rem", margin: "1rem" }}>
-              您目前沒有任何貼文。
-            </div>
+            <div style={{ width: "18rem", margin: "1rem" }}>沒有任何貼文。</div>
           )}
           {postData.map((post, index) => {
             return (
@@ -259,7 +293,7 @@ const PostComponent = ({ currentUser, setCurrentUser }) => {
                           取消
                         </button>
                         <button
-                          onClick={() => handleSaveChange(index)}
+                          onClick={() => handleUpdatePost(index)}
                           type="button"
                           className="btn btn-primary"
                         >
