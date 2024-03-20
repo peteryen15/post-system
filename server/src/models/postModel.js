@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const postSchema = new mongoose.Schema({
   author: {
     type: String,
+    required: true,
   },
   title: {
     type: String,
@@ -12,23 +13,36 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  date: {
+  createdAt: {
     type: Date,
     default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
   },
 });
 
 const Post = mongoose.model("Post", postSchema);
 
-export const findPost = (author) => {
-  return Post.find({ author }).sort({ date: -1 }).exec();
+export const getAllPosts = () => {
+  return Post.find({}).sort({ createdAt: -1 }).exec();
 };
 
-export const findPostByTitle = (author, title) => {
+export const getPostsByAuthor = (author) => {
+  return Post.find({ author }).sort({ createdAt: -1 }).exec();
+};
+
+export const getPostsByTitle = (title) => {
+  return Post.find({ title: { $regex: title, $options: "i" } })
+    .sort({ createdAt: -1 })
+    .exec();
+};
+
+export const getPostsByTitleAndAuthor = (author, title) => {
   return Post.find({
     $and: [{ author }, { title: { $regex: title, $options: "i" } }],
   })
-    .sort({ date: -1 })
+    .sort({ createdAt: -1 })
     .exec();
 };
 

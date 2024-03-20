@@ -11,11 +11,15 @@ export const loginAccount = async (email, password) => {
     throw new CustomError(400, "無效的密碼!");
   }
 
-  const foundAccount = await accountModel.findAccountByEmail(email);
+  const foundAccount = await accountModel.getAccountByEmail(email);
 
   if (foundAccount) {
     if (await bcrypt.compare(password, foundAccount.password)) {
-      const tokenObject = { _id: foundAccount._id, email: foundAccount.email };
+      const tokenObject = {
+        _id: foundAccount._id,
+        name: foundAccount.name,
+        email: foundAccount.email,
+      };
       const token = signJwt(tokenObject);
 
       return { token, user: foundAccount };

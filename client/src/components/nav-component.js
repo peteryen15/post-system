@@ -31,8 +31,8 @@ const NavComponent = ({ currentUser, setCurrentUser }) => {
             <div className="collapse navbar-collapse" id="navbarNav">
               <ul className="navbar-nav">
                 <li className="nav-item">
-                  <Link className="nav-link active" to="/">
-                    首頁
+                  <Link className="nav-link" to="/posts">
+                    全部貼文
                   </Link>
                 </li>
 
@@ -54,7 +54,10 @@ const NavComponent = ({ currentUser, setCurrentUser }) => {
 
                 {currentUser && (
                   <li className="nav-item">
-                    <Link className="nav-link" to="/posts">
+                    <Link
+                      className="nav-link"
+                      to={`/posts/${currentUser.user.name}`}
+                    >
                       我的貼文
                     </Link>
                   </li>

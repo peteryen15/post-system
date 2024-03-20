@@ -20,43 +20,53 @@ class PostService {
     );
   }
 
-  get(title) {
-    if (title) {
-      return this.getByTitle(title);
+  get(name, title) {
+    if (!title) {
+      if (!name) {
+        return this.getAll();
+      } else {
+        return this.getByName(name);
+      }
     } else {
-      return this.getAll();
+      if (!name) {
+        return this.getByTitle(title);
+      } else {
+        return this.getByTitleAndName(name, title);
+      }
     }
   }
 
   getAll() {
-    const token = this.getToken();
+    return axios.get(API_URL);
+  }
 
-    return axios.get(API_URL, {
-      headers: {
-        Authorization: token,
-      },
-    });
+  getByName(name) {
+    return axios.get(API_URL + "/" + name);
   }
 
   getByTitle(title) {
-    const token = this.getToken();
-
     return axios.get(API_URL, {
       params: {
         title,
       },
-      headers: {
-        Authorization: token,
+    });
+  }
+
+  getByTitleAndName(name, title) {
+    return axios.get(API_URL + "/" + name, {
+      params: {
+        title,
       },
     });
   }
 
   patch(_id, title, content) {
     const token = this.getToken();
+    const updatedAt = new Date().toISOString();
 
     return axios.patch(
       API_URL + "/" + _id,
-      { title, content },
+      { title, content, updatedAt },
       {
         headers: {
           Authorization: token,
@@ -76,4 +86,6 @@ class PostService {
   }
 }
 
-export default new PostService();
+const postServiceInstance = new PostService();
+
+export default postServiceInstance;

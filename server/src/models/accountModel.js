@@ -35,7 +35,7 @@ accountSchema.pre("save", async function (next) {
 
 const Account = mongoose.model("Account", accountSchema);
 
-export const findAccountByEmail = async (email) => {
+export const getAccountByEmail = async (email) => {
   return Account.findOne({ email }).exec();
 };
 

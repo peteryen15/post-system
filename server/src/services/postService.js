@@ -2,18 +2,26 @@ import { CustomError } from "../middleware/errors.js";
 import * as postModel from "../models/postModel.js";
 import { verifyJwt } from "../utils/jwt/jwt.js";
 
-export const findPost = (token, title) => {
-  const { _id: author } = verifyJwt(token);
+export const getPosts = (name, title) => {
+  const author = name;
 
-  if (title) {
-    return postModel.findPostByTitle(author, title);
+  if (!title) {
+    if (!name) {
+      return postModel.getAllPosts();
+    } else {
+      return postModel.getPostsByAuthor(author);
+    }
+  } else {
+    if (!name) {
+      return postModel.getPostsByTitle(title);
+    } else {
+      return postModel.getPostsByTitleAndAuthor(author, title);
+    }
   }
-
-  return postModel.findPost(author);
 };
 
 export const addPost = (token, title, content) => {
-  const { _id: author } = verifyJwt(token);
+  const { name: author } = verifyJwt(token);
   if (!title) {
     throw new CustomError(400, "無效的標題!");
   }
@@ -25,8 +33,8 @@ export const addPost = (token, title, content) => {
   return postModel.addPost(author, title, content);
 };
 
-export const updatePost = async (token, postId, title, content) => {
-  const { _id: author } = verifyJwt(token);
+export const updatePost = async (token, postId, title, content, updatedAt) => {
+  const { name: author } = verifyJwt(token);
   if (!postId) {
     throw new CustomError(400, "無效的ID!");
   }
@@ -42,6 +50,7 @@ export const updatePost = async (token, postId, title, content) => {
   const updatedPost = await postModel.updatePost(author, postId, {
     title,
     content,
+    updatedAt,
   });
 
   if (!updatedPost) {
@@ -52,7 +61,7 @@ export const updatePost = async (token, postId, title, content) => {
 };
 
 export const deletePost = async (token, postId) => {
-  const { _id: author } = verifyJwt(token);
+  const { name: author } = verifyJwt(token);
   if (!postId) {
     throw new CustomError(400, "無效的ID!");
   }

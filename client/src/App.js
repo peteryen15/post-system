@@ -40,7 +40,15 @@ function App() {
               />
             }
           />
-
+          <Route
+            path="posts/:name"
+            element={
+              <PostComponent
+                currentUser={currentUser}
+                setCurrentUser={setCurrentUser}
+              />
+            }
+          />
           <Route
             path="profile"
             element={

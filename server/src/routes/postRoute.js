@@ -4,8 +4,10 @@ import * as postController from "../controllers/postController.js";
 
 router
   .route("/posts")
-  .get(postController.findPost)
+  .get(postController.getPosts)
   .post(postController.addPost);
+
+router.route("/posts/:name").get(postController.getPosts);
 
 router
   .route("/posts/:postId")
