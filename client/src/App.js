@@ -49,15 +49,7 @@ function App() {
               />
             }
           />
-          <Route
-            path="profile"
-            element={
-              <ProfileComponent
-                currentUser={currentUser}
-                setCurrentUser={setCurrentUser}
-              />
-            }
-          />
+          <Route path="profile/:name" element={<ProfileComponent />} />
         </Route>
       </Routes>
     </BrowserRouter>

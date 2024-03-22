@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import PostService from "../services/post.service";
 import { formatDateTime } from "../utils/formatDateTime";
 
@@ -130,82 +130,87 @@ const PostComponent = ({ currentUser, setCurrentUser }) => {
     <div style={{ padding: "3rem" }}>
       {postData && (
         <div>
-          {currentUser && (
-            <div>
-              <button
-                type="button"
-                className="btn btn-primary"
-                style={{ width: "24rem", margin: "1rem" }}
-                data-bs-toggle="modal"
-                data-bs-target="#addPostModal"
-                onClick={() => handleEditPost()}
-              >
-                新增貼文
-              </button>
+          {currentUser &&
+            (name ? currentUser.user.name === name : currentUser) && (
+              <div>
+                <div
+                  className="d-grid"
+                  style={{ maxWidth: "24rem", margin: "1rem" }}
+                >
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addPostModal"
+                    onClick={() => handleEditPost()}
+                  >
+                    新增貼文
+                  </button>
+                </div>
 
-              <div
-                className="modal fade"
-                id="addPostModal"
-                data-bs-backdrop="static"
-                data-bs-keyboard="false"
-                tabIndex="-1"
-                aria-labelledby="addPostModalLabel"
-                aria-hidden="true"
-              >
-                <div className="modal-dialog modal-dialog-scrollable">
-                  <div className="modal-content">
-                    <div className="modal-header">
-                      <h5 className="modal-title" id="addPostModalLabel">
-                        <input
-                          onChange={handleTitleChange}
-                          type="text"
+                <div
+                  className="modal fade"
+                  id="addPostModal"
+                  data-bs-backdrop="static"
+                  data-bs-keyboard="false"
+                  tabIndex="-1"
+                  aria-labelledby="addPostModalLabel"
+                  aria-hidden="true"
+                >
+                  <div className="modal-dialog modal-dialog-scrollable">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title" id="addPostModalLabel">
+                          <input
+                            onChange={handleTitleChange}
+                            type="text"
+                            className="form-control"
+                            placeholder="標題"
+                            value={editedPost.title}
+                          />
+                        </h5>
+                        <button
+                          type="button"
+                          className="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="取消"
+                        ></button>
+                      </div>
+                      <div className="modal-body">
+                        <textarea
+                          onChange={handleContentChange}
                           className="form-control"
-                          placeholder="標題"
-                          value={editedPost.title}
+                          style={{ height: "300px", resize: "none" }}
+                          placeholder="內容"
+                          value={editedPost.content}
                         />
-                      </h5>
-                      <button
-                        type="button"
-                        className="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="取消"
-                      ></button>
+                      </div>
+                      <div className="modal-footer">
+                        <button
+                          type="button"
+                          className="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          取消
+                        </button>
+                        <button
+                          onClick={handleAddPost}
+                          type="button"
+                          className="btn btn-primary"
+                        >
+                          儲存
+                        </button>
+                      </div>
                     </div>
-                    <div className="modal-body">
-                      <textarea
-                        onChange={handleContentChange}
-                        className="form-control"
-                        style={{ height: "300px", resize: "none" }}
-                        placeholder="內容"
-                        value={editedPost.content}
-                      />
-                    </div>
-                    <div className="modal-footer">
-                      <button
-                        type="button"
-                        className="btn btn-secondary"
-                        data-bs-dismiss="modal"
-                      >
-                        取消
-                      </button>
-                      <button
-                        onClick={handleAddPost}
-                        type="button"
-                        className="btn btn-primary"
-                      >
-                        儲存
-                      </button>
-                    </div>
+                    <div id="alertPlaceholder"></div>
                   </div>
-                  <div id="alertPlaceholder"></div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
           <div
             className="input-group"
-            style={{ width: "24rem", margin: "1rem" }}
+            style={{ maxWidth: "24rem", margin: "1rem" }}
           >
             <input
               type="text"
@@ -223,19 +228,22 @@ const PostComponent = ({ currentUser, setCurrentUser }) => {
           </div>
 
           {postData.length === 0 && (
-            <div style={{ width: "24rem", margin: "1rem" }}>沒有任何貼文。</div>
+            <div style={{ maxWidth: "24rem", margin: "1rem" }}>
+              沒有任何貼文。
+            </div>
           )}
           {postData.map((post, index) => {
             return (
               <div
                 className="card"
-                style={{ width: "24rem", margin: "1rem" }}
+                style={{ maxWidth: "24rem", margin: "1rem" }}
                 key={index}
               >
                 <div className="card-body">
                   <h5 className="card-title">{post.title}</h5>
                   <h6 className="card-subtitle mb-2 text-body-secondary">
-                    作者：{post.author}
+                    作者：
+                    <Link to={`/profile/${post.author}`}>{post.author}</Link>
                   </h6>
                   <p className="card-text">{post.content}</p>
                   <div className="d-grid gap-2 d-md-flex justify-content-md-between">
@@ -295,7 +303,6 @@ const PostComponent = ({ currentUser, setCurrentUser }) => {
                                   onChange={handleContentChange}
                                   className="form-control"
                                   style={{ height: "300px", resize: "none" }}
-                                  // placeholder="Leave a comment here"
                                   value={editedPost.content}
                                 />
                               </div>

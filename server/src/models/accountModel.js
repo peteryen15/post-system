@@ -35,13 +35,13 @@ accountSchema.pre("save", async function (next) {
 
 const Account = mongoose.model("Account", accountSchema);
 
+export const getAccountByName = async (name) => {
+  return Account.findOne({ name }).exec();
+};
+
 export const getAccountByEmail = async (email) => {
   return Account.findOne({ email }).exec();
 };
-
-// export const verifyAccount = async (foundAccount, password) => {
-//   return bcrypt.compare(password, foundAccount.password);
-// };
 
 export const isAccountExist = async (name, email) => {
   const account = await Account.findOne({ $or: [{ name }, { email }] }).exec();

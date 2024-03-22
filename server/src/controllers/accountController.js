@@ -12,6 +12,18 @@ export const loginAccount = async (req, res, next) => {
   }
 };
 
+export const getAccount = async (req, res, next) => {
+  try {
+    const { name } = req.params;
+
+    const foundAccount = await accountService.getAccount(name);
+
+    return res.status(200).send(foundAccount);
+  } catch (e) {
+    next(e);
+  }
+};
+
 export const addAccount = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;

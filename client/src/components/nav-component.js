@@ -73,8 +73,11 @@ const NavComponent = ({ currentUser, setCurrentUser }) => {
 
                 {currentUser && (
                   <li className="nav-item">
-                    <Link className="nav-link" to="/profile">
-                      個人頁面
+                    <Link
+                      className="nav-link"
+                      to={`/profile/${currentUser.user.name}`}
+                    >
+                      您的個人頁面
                     </Link>
                   </li>
                 )}

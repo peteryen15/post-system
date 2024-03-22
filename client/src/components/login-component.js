@@ -19,9 +19,9 @@ const LoginComponent = ({ currentUser, setCurrentUser }) => {
     try {
       const response = await AuthService.login(email, password);
       localStorage.setItem("user", JSON.stringify(response.data));
-      window.alert("登入成功，您將被導向個人頁面");
+      window.alert("登入成功，將導向您的個人頁面");
       setCurrentUser(AuthService.getCurrentUser());
-      navigate("/profile");
+      navigate(`/profile/${response.data.user.name}`);
     } catch (err) {
       if (err.response) {
         setMessage(err.response.data.message);

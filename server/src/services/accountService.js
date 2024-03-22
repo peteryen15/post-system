@@ -30,6 +30,11 @@ export const loginAccount = async (email, password) => {
     throw new CustomError(401, "信箱不存在!");
   }
 };
+
+export const getAccount = async (name) => {
+  return accountModel.getAccountByName(name);
+};
+
 export const addAccount = async (name, email, password) => {
   if (!name) {
     throw new CustomError(400, "無效的用戶名!");
