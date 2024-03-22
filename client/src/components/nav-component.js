@@ -56,7 +56,7 @@ const NavComponent = ({ currentUser, setCurrentUser }) => {
                   <li className="nav-item">
                     <Link
                       className="nav-link"
-                      to={`/posts/${currentUser.user.name}`}
+                      to={`/posts?author=${currentUser.user.name}`}
                     >
                       我的貼文
                     </Link>

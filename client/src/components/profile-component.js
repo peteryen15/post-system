@@ -21,7 +21,7 @@ const ProfileComponent = () => {
   }, [name]);
 
   const handleClick = () => {
-    const url = `/posts/${name}`;
+    const url = `/posts?author=${name}`;
 
     navigate(url);
   };

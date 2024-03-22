@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import PostService from "../services/post.service";
 import { formatDateTime } from "../utils/formatDateTime";
 
 const PostComponent = ({ currentUser, setCurrentUser }) => {
   const navigate = useNavigate();
-  const { name } = useParams();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const author = queryParams.get("author");
+  const title = queryParams.get("title");
   const [postData, setPostData] = useState("");
-  const [searchInput, setSearchInput] = useState("");
+  const [searchTitleInput, setSearchTitleInput] = useState("");
+  const [searchAuthorInput, setSearchAuthorInput] = useState("");
   const [editedPost, setEditedPost] = useState({
     _id: "",
     title: "",
@@ -15,27 +19,21 @@ const PostComponent = ({ currentUser, setCurrentUser }) => {
   });
 
   useEffect(() => {
-    if (name) {
-      PostService.get(name)
-        .then((data) => {
-          setPostData(data.data);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    } else {
-      PostService.get()
-        .then((data) => {
-          setPostData(data.data);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    }
-  }, [name]);
+    PostService.get(author, title)
+      .then((data) => {
+        setPostData(data.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, [author, title]);
 
-  const handleSearchChange = (e) => {
-    setSearchInput(e.target.value);
+  const handleSearchTitleChange = (e) => {
+    setSearchTitleInput(e.target.value);
+  };
+
+  const handleSearchAuthorChange = (e) => {
+    setSearchAuthorInput(e.target.value);
   };
 
   const handleTitleChange = (e) => {
@@ -80,13 +78,27 @@ const PostComponent = ({ currentUser, setCurrentUser }) => {
   };
 
   const handleFindPost = () => {
-    PostService.get(name, searchInput)
-      .then((data) => {
-        setPostData(data.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    const title = encodeURIComponent(searchTitleInput);
+    const author = encodeURIComponent(searchAuthorInput);
+    const queryParams = {};
+
+    if (author) {
+      queryParams.author = author;
+    }
+
+    if (title) {
+      queryParams.title = title;
+    }
+
+    const searchParamsString = new URLSearchParams(queryParams).toString();
+    navigate(`/posts?${searchParamsString}`);
+  };
+
+  const handleClearFind = () => {
+    setSearchTitleInput("");
+    setSearchAuthorInput("");
+
+    navigate(`/posts`);
   };
 
   const handleUpdatePost = (index) => {
@@ -130,100 +142,114 @@ const PostComponent = ({ currentUser, setCurrentUser }) => {
     <div style={{ padding: "3rem" }}>
       {postData && (
         <div>
-          {currentUser &&
-            (name ? currentUser.user.name === name : currentUser) && (
-              <div>
-                <div
-                  className="d-grid"
-                  style={{ maxWidth: "24rem", margin: "1rem" }}
+          {currentUser && (
+            <div>
+              <div
+                className="d-grid"
+                style={{ maxWidth: "24rem", margin: "1rem" }}
+              >
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#addPostModal"
+                  onClick={() => handleEditPost()}
                 >
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#addPostModal"
-                    onClick={() => handleEditPost()}
-                  >
-                    新增貼文
-                  </button>
-                </div>
+                  新增貼文
+                </button>
+              </div>
 
-                <div
-                  className="modal fade"
-                  id="addPostModal"
-                  data-bs-backdrop="static"
-                  data-bs-keyboard="false"
-                  tabIndex="-1"
-                  aria-labelledby="addPostModalLabel"
-                  aria-hidden="true"
-                >
-                  <div className="modal-dialog modal-dialog-scrollable">
-                    <div className="modal-content">
-                      <div className="modal-header">
-                        <h5 className="modal-title" id="addPostModalLabel">
-                          <input
-                            onChange={handleTitleChange}
-                            type="text"
-                            className="form-control"
-                            placeholder="標題"
-                            value={editedPost.title}
-                          />
-                        </h5>
-                        <button
-                          type="button"
-                          className="btn-close"
-                          data-bs-dismiss="modal"
-                          aria-label="取消"
-                        ></button>
-                      </div>
-                      <div className="modal-body">
-                        <textarea
-                          onChange={handleContentChange}
+              <div
+                className="modal fade"
+                id="addPostModal"
+                data-bs-backdrop="static"
+                data-bs-keyboard="false"
+                tabIndex="-1"
+                aria-labelledby="addPostModalLabel"
+                aria-hidden="true"
+              >
+                <div className="modal-dialog modal-dialog-scrollable">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h5 className="modal-title" id="addPostModalLabel">
+                        <input
+                          onChange={handleTitleChange}
+                          type="text"
                           className="form-control"
-                          style={{ height: "300px", resize: "none" }}
-                          placeholder="內容"
-                          value={editedPost.content}
+                          placeholder="標題"
+                          value={editedPost.title}
                         />
-                      </div>
-                      <div className="modal-footer">
-                        <button
-                          type="button"
-                          className="btn btn-secondary"
-                          data-bs-dismiss="modal"
-                        >
-                          取消
-                        </button>
-                        <button
-                          onClick={handleAddPost}
-                          type="button"
-                          className="btn btn-primary"
-                        >
-                          儲存
-                        </button>
-                      </div>
+                      </h5>
+                      <button
+                        type="button"
+                        className="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="取消"
+                      ></button>
                     </div>
-                    <div id="alertPlaceholder"></div>
+                    <div className="modal-body">
+                      <textarea
+                        onChange={handleContentChange}
+                        className="form-control"
+                        style={{ height: "300px", resize: "none" }}
+                        placeholder="內容"
+                        value={editedPost.content}
+                      />
+                    </div>
+                    <div className="modal-footer">
+                      <button
+                        type="button"
+                        className="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        取消
+                      </button>
+                      <button
+                        onClick={handleAddPost}
+                        type="button"
+                        className="btn btn-primary"
+                      >
+                        儲存
+                      </button>
+                    </div>
                   </div>
+                  <div id="alertPlaceholder"></div>
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
           <div
             className="input-group"
             style={{ maxWidth: "24rem", margin: "1rem" }}
           >
             <input
-              type="text"
+              type="search"
               className="form-control"
               placeholder="輸入標題"
-              onChange={handleSearchChange}
+              value={searchTitleInput}
+              onChange={handleSearchTitleChange}
+            />
+            <input
+              type="search"
+              className="form-control"
+              placeholder="輸入作者"
+              value={searchAuthorInput}
+              onChange={handleSearchAuthorChange}
             />
             <button
               className="btn btn-primary"
               type="button"
               onClick={handleFindPost}
             >
-              查詢貼文
+              查詢
+            </button>
+            <button
+              className="btn btn-secondary"
+              type="button"
+              onClick={handleClearFind}
+            >
+              清除
             </button>
           </div>
 

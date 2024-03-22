@@ -2,10 +2,9 @@ import * as postService from "../services/postService.js";
 
 export const getPosts = async (req, res, next) => {
   try {
-    const { name } = req.params;
-    const { title } = req.query;
+    const { author, title } = req.query;
 
-    const foundPost = await postService.getPosts(name, title);
+    const foundPost = await postService.getPosts(author, title);
 
     return res.status(200).send(foundPost);
   } catch (e) {

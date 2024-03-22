@@ -2,17 +2,15 @@ import { CustomError } from "../middleware/errors.js";
 import * as postModel from "../models/postModel.js";
 import { verifyJwt } from "../utils/jwt/jwt.js";
 
-export const getPosts = (name, title) => {
-  const author = name;
-
+export const getPosts = (author, title) => {
   if (!title) {
-    if (!name) {
+    if (!author) {
       return postModel.getAllPosts();
     } else {
       return postModel.getPostsByAuthor(author);
     }
   } else {
-    if (!name) {
+    if (!author) {
       return postModel.getPostsByTitle(title);
     } else {
       return postModel.getPostsByTitleAndAuthor(author, title);

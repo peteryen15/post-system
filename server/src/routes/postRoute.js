@@ -7,8 +7,6 @@ router
   .get(postController.getPosts)
   .post(postController.addPost);
 
-router.route("/posts/:name").get(postController.getPosts);
-
 router
   .route("/posts/:postId")
   .patch(postController.updatePost)

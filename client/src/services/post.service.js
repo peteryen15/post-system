@@ -20,41 +20,10 @@ class PostService {
     );
   }
 
-  get(name, title) {
-    if (!title) {
-      if (!name) {
-        return this.getAll();
-      } else {
-        return this.getByName(name);
-      }
-    } else {
-      if (!name) {
-        return this.getByTitle(title);
-      } else {
-        return this.getByTitleAndName(name, title);
-      }
-    }
-  }
-
-  getAll() {
-    return axios.get(API_URL);
-  }
-
-  getByName(name) {
-    return axios.get(API_URL + "/" + name);
-  }
-
-  getByTitle(title) {
+  get(author, title) {
     return axios.get(API_URL, {
       params: {
-        title,
-      },
-    });
-  }
-
-  getByTitleAndName(name, title) {
-    return axios.get(API_URL + "/" + name, {
-      params: {
+        author,
         title,
       },
     });
