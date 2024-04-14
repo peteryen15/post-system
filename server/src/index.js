@@ -7,6 +7,7 @@ const app = express();
 import mongoose from "mongoose";
 import router from "../routes.js";
 import { errorHandler } from "./middleware/errors.js";
+import { startWebSocketServer } from "./utils/ws/ws.js";
 import cors from "cors";
 
 (() => {
@@ -26,7 +27,9 @@ import cors from "cors";
   app.use("/api", router);
   app.use(errorHandler);
 
-  app.listen(process.env.PORT, () => {
+  const server = app.listen(process.env.PORT, () => {
     console.log(`伺服器聆聽在port ${process.env.PORT}...`);
   });
+
+  startWebSocketServer(server);
 })();

@@ -6,6 +6,7 @@ import RegisterComponent from "./components/register-component";
 import LoginComponent from "./components/login-component";
 import PostComponent from "./components/post-component";
 import ProfileComponent from "./components/profile-component";
+import ChatComponent from "./components/chat-component";
 import AuthService from "./services/auth.service";
 
 function App() {
@@ -41,6 +42,15 @@ function App() {
             }
           />
           <Route path="profile/:name" element={<ProfileComponent />} />
+          <Route
+            path="chat"
+            element={
+              <ChatComponent
+                currentUser={currentUser}
+                setCurrentUser={setCurrentUser}
+              />
+            }
+          />
         </Route>
       </Routes>
     </BrowserRouter>

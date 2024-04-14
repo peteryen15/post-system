@@ -81,6 +81,13 @@ const NavComponent = ({ currentUser, setCurrentUser }) => {
                     </Link>
                   </li>
                 )}
+                {currentUser && (
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/chat">
+                      聊天室
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
           </div>
