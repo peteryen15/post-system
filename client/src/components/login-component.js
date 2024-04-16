@@ -33,7 +33,7 @@ const LoginComponent = ({ currentUser, setCurrentUser }) => {
 
   return (
     <div style={{ padding: "3rem" }} className="col-md-12">
-      <div>
+      <div style={{ maxWidth: "24rem" }} className="mx-auto d-grid">
         {message && <div className="alert alert-danger">{message}</div>}
         <div className="form-group">
           <label htmlFor="email">電子信箱：</label>
@@ -57,11 +57,9 @@ const LoginComponent = ({ currentUser, setCurrentUser }) => {
           />
         </div>
         <br />
-        <div className="form-group">
-          <button onClick={handleLogin} className="btn btn-primary btn-block">
-            <span>登入系統</span>
-          </button>
-        </div>
+        <button onClick={handleLogin} className="btn btn-primary">
+          <span>登入系統</span>
+        </button>
       </div>
     </div>
   );

@@ -36,7 +36,7 @@ const RegisterComponent = () => {
 
   return (
     <div style={{ padding: "3rem" }} className="col-md-12">
-      <div>
+      <div style={{ maxWidth: "24rem" }} className="mx-auto d-grid">
         {message && <div className="alert alert-danger">{message}</div>}
         <div>
           <label htmlFor="name">用戶名稱:</label>
@@ -73,7 +73,7 @@ const RegisterComponent = () => {
         </div>
         <br />
         <button onClick={handleRegister} className="btn btn-primary">
-          <span>註冊會員</span>
+          <span>註冊</span>
         </button>
       </div>
     </div>

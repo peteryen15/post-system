@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 const HomeComponent = () => {
   return (
@@ -12,6 +13,11 @@ const HomeComponent = () => {
               本系統使用 React.js 作為前端框架，Node.js、MongoDB
               作為後端伺服器。此項目為 MERN 項目。
             </p>
+            <button type="button" className="btn btn-primary">
+              <NavLink className="nav-link" to="/posts">
+                觀看全部貼文
+              </NavLink>
+            </button>
           </div>
         </div>
       </div>
