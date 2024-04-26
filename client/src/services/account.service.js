@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_URL = "http://localhost:8080/api/account";
+const API_URL = "https://post-system-api.onrender.com/api/account";
 
 class AccountService {
   post(name, email, password) {
