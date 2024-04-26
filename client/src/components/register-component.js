@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AuthService from "../services/auth.service";
+import AccountService from "../services/account.service";
 
 const RegisterComponent = () => {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const RegisterComponent = () => {
   };
 
   const handleRegister = () => {
-    AuthService.register(name, email, password)
+    AccountService.post(name, email, password)
       .then(() => {
         window.alert("註冊成功，您將被導向登入頁面");
         navigate("/login");
