@@ -6,7 +6,8 @@ import AccountService from "../services/account.service";
 const ProfileComponent = () => {
   const { name } = useParams();
   const navigate = useNavigate();
-  const [authorProfile, setAuthorProfile] = useState({});
+  const [authorProfile, setAuthorProfile] = useState("");
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     if (name) {
@@ -14,8 +15,12 @@ const ProfileComponent = () => {
         .then((data) => {
           setAuthorProfile(data.data);
         })
-        .catch((e) => {
-          console.log(e);
+        .catch((err) => {
+          if (err.response) {
+            setMessage(err.response.data.message);
+          } else {
+            setMessage("未知的錯誤!");
+          }
         });
     }
   }, [name]);
@@ -29,7 +34,12 @@ const ProfileComponent = () => {
   return (
     <div style={{ padding: "3rem" }}>
       <div style={{ maxWidth: "24rem" }} className="mx-auto">
-        {!authorProfile && <div>找不到該作者的個人檔案。</div>}
+        {message && <div className="alert alert-danger">{message}</div>}
+        {!authorProfile && !message && (
+          <div className="d-flex justify-content-center">
+            <div className="spinner-border text-primary" role="status"></div>
+          </div>
+        )}
         {authorProfile && (
           <div>
             <h2>以下是{name}的個人檔案：</h2>

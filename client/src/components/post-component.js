@@ -143,6 +143,11 @@ const PostComponent = ({ currentUser, setCurrentUser }) => {
   return (
     <div style={{ padding: "3rem" }}>
       <div style={{ maxWidth: "36rem" }} className="mx-auto">
+        {!postData && (
+          <div className="d-flex justify-content-center">
+            <div className="spinner-border text-primary" role="status"></div>
+          </div>
+        )}
         {postData && (
           <div>
             {currentUser && (

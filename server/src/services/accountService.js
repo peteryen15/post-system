@@ -32,7 +32,17 @@ export const loginAccount = async (email, password) => {
 };
 
 export const getAccount = async (name) => {
-  return accountModel.getAccountByName(name);
+  // if (!name) {
+  //   throw new CustomError(400, "無效的用戶名!");
+  // }
+
+  const foundAccount = await accountModel.getAccountByName(name);
+
+  if (foundAccount) {
+    return foundAccount;
+  } else {
+    throw new CustomError(404, "找不到該用戶名!");
+  }
 };
 
 export const addAccount = async (name, email, password) => {
