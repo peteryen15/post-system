@@ -1,6 +1,7 @@
 import { CustomError } from "../middleware/errors.js";
 import * as accountModel from "../models/accountModel.js";
 import { signJwt } from "../utils/jwt/jwt.js";
+import { registerValidation } from "../utils/validation/validation.js";
 import bcrypt from "bcrypt";
 
 export const loginAccount = async (email, password) => {
@@ -46,15 +47,10 @@ export const getAccount = async (name) => {
 };
 
 export const addAccount = async (name, email, password) => {
-  if (!name) {
-    throw new CustomError(400, "無效的用戶名!");
-  }
-  if (!email) {
-    throw new CustomError(400, "無效的信箱!");
-  }
+  const { error } = registerValidation({ name, email, password });
 
-  if (!password) {
-    throw new CustomError(400, "無效的密碼!");
+  if (error) {
+    throw new CustomError(400, error.details[0].message);
   }
 
   if (await accountModel.isAccountExist(name, email)) {
